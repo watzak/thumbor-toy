@@ -22,6 +22,7 @@ import TweenState             from 'react-tween-state';
 
 
 const themes = [
+    { value: 'bildor',  label: 'Bildor theme'  },
     { value: 'dark',  label: 'Dark theme'  },
     { value: 'light', label: 'Light theme' }
 ];

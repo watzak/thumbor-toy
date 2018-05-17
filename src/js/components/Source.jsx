@@ -14,6 +14,7 @@ import SourceStore       from './../stores/SourceStore';
 import SwitchControl     from './form/SwitchControl.jsx';
 import ChoiceControl     from './form/ChoiceControl.jsx';
 import TextControl       from './form/TextControl.jsx';
+import ConfigStore            from './../stores/ConfigStore';
 
 
 const imageSourceTypeChoices = [
@@ -29,6 +30,7 @@ const Source = React.createClass({
 
     componentWillMount() {
         this.listenTo(SourceStore, () => {
+
             this.setState({
                 server: SourceStore.server(),
                 image:  SourceStore.image()
@@ -44,12 +46,21 @@ const Source = React.createClass({
     },
 
     getInitialState() {
-        return {
+
+      return {
             sourceType: 'static',
-            server:     SourceStore.server(),
+            server:     (SourceStore.server() === "") ? ConfigStore.get('source')['servers'] : SourceStore.server(),
             image:      SourceStore.image(),
             images:     []
         };
+
+    },
+
+    componentDidMount() {
+      if (typeof this.state.server !== 'undefined' && this.state.server.length > 0) {
+        SourceActions.set(this.state.server[0].value, '');
+        SourceActions.setImage(this.state.server[0].images[0].value);
+      }
     },
 
     onServerChange(key, server) {
@@ -63,7 +74,7 @@ const Source = React.createClass({
     },
 
     onImageChange(key, image) {
-        SourceActions.setImage(image);
+      SourceActions.setImage(image);
     },
 
     render() {
@@ -120,12 +131,6 @@ const Source = React.createClass({
                     Image Source <i className="fa fa-picture-o" />
                 </h3>
                 <div className="panel__content">
-                    <ChoiceControl
-                        label="server"
-                        propKey="server" choices={serverChoices}
-                        onChange={this.onServerChange}
-                        value={server}
-                    />
                     {imageSource}
                 </div>
             </div>

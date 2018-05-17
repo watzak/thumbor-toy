@@ -66,7 +66,7 @@ var Header = React.createClass({
         return (
             <div className="header">
                 <Url url={this.state.url} error={this.state.hasError} />
-                <span className="header__settings" onClick={this.onSettingsClick}>
+                <span className="header__settings" onClick={this.onSettingsClick} style={{display:'none'}}>
                     <i className="fa fa-cog"/>
                 </span>
                 {urlNotice}
